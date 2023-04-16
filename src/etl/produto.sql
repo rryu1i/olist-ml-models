@@ -1,8 +1,4 @@
 -- Databricks notebook source
-
-
--- COMMAND ----------
-
 WITH tb_join
 AS (
 	SELECT DISTINCT t2.idVendedor
@@ -88,19 +84,3 @@ AS (
 SELECT '2018-01-01' AS dtReference
 	,*
 FROM tb_summary
-
--- COMMAND ----------
-
-select descCategoria
-from silver.olist.item_pedido as t2
-
-left join silver.olist.produto as t3
-on t2.idProduto = t3.idProduto
-where t2.idVendedor is not null
-group by 1
-order by count(distinct idPedido) desc
-limit 15
-
--- COMMAND ----------
-
-

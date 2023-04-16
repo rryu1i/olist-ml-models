@@ -12,6 +12,7 @@ FROM silver.olist.pedido AS t1
 LEFT JOIN silver.olist.item_pedido AS t2 ON t1.idPedido = t2.idPedido
 WHERE dtPedido < '2018-01-01'
 	AND dtPedido >= add_months('2018-01-01', - 6)
+    and idVendedor is not null
 GROUP BY t1.idPedido
 	,t2.idVendedor
 	,t1.descSituacao
@@ -21,7 +22,9 @@ GROUP BY t1.idPedido
 	,t1.dtEstimativaEntrega
 )
 
-SELECT idVendedor
+SELECT 
+'2018-01-01' as dtReference,
+     idVendedor
 	,count(DISTINCT CASE 
 			WHEN descSituacao = 'delivered'
 				AND DATE (coalesce(dtEntregue, '2018-01-01')) > DATE (dtEstimativaEntrega)
@@ -42,7 +45,7 @@ SELECT idVendedor
             avg(datediff(coalesce(dtEntregue, '2018-01-01'), dtPedido)) as qtdDiasPedidoEntrega,
             avg(datediff(coalesce(dtEntregue, '2018-01-01'), coalesce(dtEstimativaEntrega, '2018-01-01'))) as qtdDiasEntreguePromessa
 FROM tb_pedido
-GROUP BY 1
+GROUP BY 1,2
 
 -- COMMAND ----------
 

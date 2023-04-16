@@ -1,4 +1,3 @@
--- Databricks notebook source
 WITH tb_pedido_item AS (
 
   SELECT t2.*,
@@ -9,8 +8,8 @@ WITH tb_pedido_item AS (
   LEFT JOIN silver.olist.item_pedido AS t2
   ON t1.idPedido = t2.idPedido
 
-  WHERE t1.dtPedido < '2018-01-01'
-  AND t1.dtPedido >= add_months('2018-01-01', -6)
+  WHERE t1.dtPedido < '{date}'
+  AND t1.dtPedido >= add_months('{date}', -6)
   AND t2.idVendedor IS NOT NULL
 
 ),
@@ -63,14 +62,14 @@ tb_life AS (
 
   SELECT t2.idVendedor,
          sum(vlPreco) AS LTV,
-         max(datediff('2018-01-01', dtPedido)) AS qtdeDiasBase
+         max(datediff('{date}', dtPedido)) AS qtdeDiasBase
 
   FROM silver.olist.pedido AS t1
 
   LEFT JOIN silver.olist.item_pedido AS t2
   ON t1.idPedido = t2.idPedido
 
-  WHERE t1.dtPedido < '2018-01-01'
+  WHERE t1.dtPedido < '{date}'
   AND t2.idVendedor IS NOT NULL
 
   GROUP BY t2.idVendedor
@@ -123,7 +122,3 @@ on t1.idVendedor = t3.idVendedor
 
 LEFT JOIN tb_intervalo AS t4
 ON t1.idVendedor = t4.idVendedor
-
--- COMMAND ----------
-
-
